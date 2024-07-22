@@ -2,22 +2,25 @@ import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from "typeorm";
 import { Usuario } from "./Usuario";
 
 export enum CategoriaReceita {
-    SALARIO = "Salário",
-    INVESTIMENTO = "Investimento",
-    PRODUTOS_E_SERVICOS = "Produtos e Servicos Vendidos",
-  }
+  SALARIO = "Salário",
+  INVESTIMENTO = "Investimento",
+  PRODUTOS_E_SERVICOS = "Produtos e Servicos Vendidos",
+}
 
 @Entity()
-export class Receita{
+export class Receita {
+  @PrimaryGeneratedColumn()
+  id!: number;
 
-@PrimaryGeneratedColumn()
-  id!: Number;
-
-  @Column({ type: "varchar", length: 100, nullable: false })
-  titulo!: String;
+  @Column({
+    type: "varchar",
+    length: 100,
+    nullable: false,
+  })
+  titulo!: string;
 
   @Column({ type: "varchar", length: 200, nullable: true })
-  descricao!: String;
+  descricao!: string;
 
   @Column({
     type: "decimal",
@@ -25,19 +28,16 @@ export class Receita{
     scale: 2,
     nullable: true,
   })
-  valor!: Number;
-
+  valor!: number;
 
   @Column({
     type: "enum",
     enum: CategoriaReceita,
     nullable: false,
   })
-  categoria!: String;
+  categoria!: CategoriaReceita;
 
-
-  
-  @ManyToOne(() => Usuario, usuario => usuario.receitas)
+  @ManyToOne(() => Usuario, (usuario) => usuario.receitas)
   usuario!: Usuario;
 
 

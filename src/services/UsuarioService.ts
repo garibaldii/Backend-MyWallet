@@ -20,8 +20,6 @@ export class UsuarioService {
   }
 
   public async criar(usuario: Usuario): Promise<Usuario> {
-    const salt = bcrypt.genSaltSync(10)
-    usuario.senha = bcrypt.hashSync(usuario.senha, salt)
     return await this.usuarioRepository.save(usuario);
   }
 
@@ -30,14 +28,21 @@ export class UsuarioService {
   }
 
   public async listar(): Promise<Usuario[]> {
-    return await this.usuarioRepository.find();
+    return await this.usuarioRepository.find({
+      relations: ['receitas', 'despesas']
+    });
   }
 
 
   public async buscarPorId(id: number): Promise<Usuario | undefined> {
     return await this.usuarioRepository.findOne({
       where: { id: id },
+      relations: ['receitas', 'despesas']
     }) ?? undefined;
   }
+
+
+
+
 
 }

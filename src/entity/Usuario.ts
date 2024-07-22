@@ -1,17 +1,10 @@
-
-import { Entity, PrimaryGeneratedColumn, Column, PrimaryColumn, OneToMany } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm";
 import { Receita } from "./Receita";
 import { Despesa } from "./Despesa";
 
 @Entity()
 export class Usuario {
-
-
-
-
-
   @PrimaryGeneratedColumn()
-  @PrimaryColumn()
   id!: number;
 
   @Column({
@@ -19,7 +12,7 @@ export class Usuario {
     length: 50,
     nullable: false,
   })
-  nome!: String;
+  nome!: string;
 
   @Column({
     type: "varchar",
@@ -27,11 +20,11 @@ export class Usuario {
     nullable: false,
     unique: true,
   })
-  email!: String;
+  email!: string;
 
   @Column({
     type: "varchar",
-    length: 300,
+    length: 200,
     nullable: false,
   })
   senha!: string;
@@ -48,13 +41,16 @@ export class Usuario {
     scale: 2,
     nullable: true,
   })
-  saldo!: Number;
+  saldo!: number;
+
+ 
+  @OneToMany(() => Receita, (receita) => receita.usuario)
+  receitas!: Receita[];
 
 
+  
+  @OneToMany(() => Despesa, (despesa) => despesa.usuario)
+  despesas!: Despesa[];
 
-  @OneToMany(() => Receita, receita => receita.usuario )
-  receitas!: Receita[]
 
-  @OneToMany(() => Despesa, despesa => despesa.usuario)
-  despesas!: Despesa[]
 }
