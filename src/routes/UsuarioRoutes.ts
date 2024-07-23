@@ -1,12 +1,12 @@
 import Router from "express";
-import { UsuarioController } from "../controllers/UsuarioController";
+import { UsuarioComumController } from "../controllers/UsuarioComumController";
 
 
 const router = Router();
 
 // router.get("/", UsuarioController.listarTodos);
 // router.get("/:id", UsuarioController.listarUm);
-router.post("/", UsuarioController.criar);
+router.post("/", UsuarioComumController.criar);
 // router.delete("/:id", UsuarioController.deletar);
 
 

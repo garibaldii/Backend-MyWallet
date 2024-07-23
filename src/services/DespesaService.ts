@@ -1,6 +1,8 @@
 import { getRepository, Repository } from 'typeorm';
 import { Despesa } from '../entity/Despesa';
-import { Usuario } from '../entity/Usuario';
+import { UsuarioComum } from '../entity/UsuarioComum';
+import { UsuarioComumService } from './UsuarioComumService';
+import { Status } from '../enums/Status';
 
 export class DespesaService {
     private static instance: DespesaService;
@@ -18,7 +20,7 @@ export class DespesaService {
     }
 
     public async criar(dados: Despesa, idUsuario: number): Promise<Despesa> {
-        const usuarioRepository = getRepository(Usuario);
+        const usuarioRepository = getRepository(UsuarioComum);
     
         const usuario = await usuarioRepository.findOne({
             where: { id: idUsuario },
@@ -54,6 +56,10 @@ export class DespesaService {
         return despesaComUsuario;
     }
 
+    public async salvar(despesa: Despesa): Promise<Despesa>{
+        return await this.despesaRepository.save(despesa)
+    }
+
     public async listar(): Promise<Despesa[]> {
         return await this.despesaRepository.find();
     }
@@ -87,5 +93,30 @@ export class DespesaService {
         await this.despesaRepository.save(despesa);
 
         return despesa;
+    }
+
+
+    public async realizarOperacao(idDespesa: number, idUsuario: number): Promise<void> {
+        const usuarioComumService = await UsuarioComumService.getInstance();
+
+        // Buscar a despesa e o usuário
+        const despesa = await this.buscarPorId(idDespesa);
+        const usuario = await usuarioComumService.buscarPorId(idUsuario);
+
+        if (!despesa || !usuario) throw new Error("Despesa ou Usuário não encontrados");
+        
+        if(despesa.status === Status.FINALIZADO) throw new Error("Esta conta já foi finalizada, tente com outra");
+
+        // Verificar se a despesa está na lista de despesas do usuário
+        const despesaExiste = usuario.despesas.some(d => d.id === idDespesa);
+
+        if (!despesaExiste) throw new Error("Despesa não encontrada na lista de despesas do usuário");
+        
+        // Realizar a operação
+        despesa.operacao(despesa, usuario);
+
+        // Salvar as mudanças
+        await this.salvar(despesa);
+        await usuarioComumService.criar(usuario); 
     }
 }

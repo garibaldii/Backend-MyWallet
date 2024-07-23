@@ -1,6 +1,8 @@
 import { getRepository, Repository } from 'typeorm';
 import { Receita } from '../entity/Receita';
-import { Usuario } from '../entity/Usuario';
+import { UsuarioComum } from '../entity/UsuarioComum';
+import { UsuarioComumService } from './UsuarioComumService';
+import { Status } from '../enums/Status';
 
 export class ReceitaService {
     private static instance: ReceitaService;
@@ -18,7 +20,7 @@ export class ReceitaService {
     }
 
     public async criar(dados: Receita, idUsuario: number): Promise<Receita> {
-        const usuarioRepository = getRepository(Usuario);
+        const usuarioRepository = getRepository(UsuarioComum);
     
         const usuario = await usuarioRepository.findOne({
             where: { id: idUsuario },
@@ -52,6 +54,10 @@ export class ReceitaService {
         }
     
         return receitaComUsuario;
+    }
+
+    public async salvar(receita: Receita): Promise<Receita>{
+        return await this.receitaRepository.save(receita)
     }
 
 
@@ -94,6 +100,34 @@ export class ReceitaService {
 
         return receita;
     }
+
+    public async realizarOperacao(idReceita: number, idUsuario: number): Promise<void> {
+
+        const usuarioComumService = await UsuarioComumService.getInstance();
+
+        // Buscar a receita e o usuário
+        const receita = await this.buscarPorId(idReceita);
+        const usuario = await usuarioComumService.buscarPorId(idUsuario);
+
+        if (!receita || !usuario) throw new Error("Receita ou Usuário não encontrados");
+        
+        if(receita.status == Status.FINALIZADO) throw new Error("Esta conta já foi finalizada, tente com outra")
+
+        // Verificar se a receita está na lista de receitas do usuário
+        const receitaExiste = usuario.receitas.some(r => r.id === idReceita);
+
+        if (!receitaExiste) throw new Error("Receita não encontrada na lista de receitas do usuário");
+        
+
+        // Realizar a operação
+        receita.operacao(receita, usuario);
+
+        // Salvar as mudanças
+        await this.salvar(receita)
+        await usuarioComumService.criar(usuario); 
+    }
+
+    
 
 
 }

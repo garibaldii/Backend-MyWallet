@@ -16,7 +16,7 @@ const port = 3000
 
 app.use(express.json())
 app.use(bodyParser.json())
-app.use("/api/usuario", rotaUsuario)
+app.use("/api/usuarioComum", rotaUsuario)
 app.use("/api/receita", rotaReceita)
 app.use("/api/despesa", rotaDespesa)
 app.use("/api/auth", rotaAuth)

@@ -1,12 +1,12 @@
 import { getRepository } from 'typeorm';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import { Usuario } from '../entity/Usuario';
+import { UsuarioComum } from '../entity/UsuarioComum';
 
 export class AuthService {
   
   static async login(email: string, senha: string) {
-    const usuarioRepository = getRepository(Usuario);
+    const usuarioRepository = getRepository(UsuarioComum);
 
     const usuario = await usuarioRepository.findOne({ where: { email } });
 

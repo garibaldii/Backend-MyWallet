@@ -1,8 +1,9 @@
 // src/database.ts
 import { createConnection, getRepository, Connection } from 'typeorm';
-import { Usuario } from './entity/Usuario';
+import { UsuarioComum } from './entity/UsuarioComum';
 import { Receita } from './entity/Receita';
 import { Despesa } from './entity/Despesa';
+import { Usuario } from 'entity/abstratas/Usuario';
 
 let connection: Connection
 
@@ -17,8 +18,8 @@ export const connectDatabase = async () => {
   }
 };
 
-export const getUsuarioRepository = () => {
-  return getRepository(Usuario);
+export const getUsuarioComumRepository = () => {
+  return getRepository(UsuarioComum);
 };
 
 export const getReceitaRepository = () => {
@@ -28,6 +29,8 @@ export const getReceitaRepository = () => {
 export const getDespesaRepository = () => {
   return getRepository(Despesa)
 }
+
+
 
 export const getConnection = (): Connection => {
   if (!connection){

@@ -1,34 +1,28 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from "typeorm";
-import { Usuario } from "./Usuario";
+import { Entity, Column, ManyToOne } from "typeorm";
+import { UsuarioComum } from "./UsuarioComum";
+import { Conta } from "./abstratas/Conta";
+
+import { Status } from "../enums/Status";
+
 
 export enum CategoriaReceita {
   SALARIO = "Salário",
   INVESTIMENTO = "Investimento",
   PRODUTOS_E_SERVICOS = "Produtos e Servicos Vendidos",
 }
+ 
+
 
 @Entity()
-export class Receita {
-  @PrimaryGeneratedColumn()
-  id!: number;
+export class Receita extends Conta{
 
-  @Column({
-    type: "varchar",
-    length: 100,
-    nullable: false,
-  })
-  titulo!: string;
 
-  @Column({ type: "varchar", length: 200, nullable: true })
-  descricao!: string;
+  operacao(receita: Receita, usuario: UsuarioComum): void {
+    usuario.saldo = receita.valor + usuario.saldo
+    receita.status = Status.FINALIZADO
 
-  @Column({
-    type: "decimal",
-    precision: 10,
-    scale: 2,
-    nullable: true,
-  })
-  valor!: number;
+  }
+ 
 
   @Column({
     type: "enum",
@@ -37,8 +31,10 @@ export class Receita {
   })
   categoria!: CategoriaReceita;
 
-  @ManyToOne(() => Usuario, (usuario) => usuario.receitas)
-  usuario!: Usuario;
+
+
+  @ManyToOne(() => UsuarioComum, (usuario) => usuario.receitas)
+  usuario!: UsuarioComum;
 
 
 }

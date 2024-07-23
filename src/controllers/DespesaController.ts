@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
-import { Despesa } from './../entity/Despesa';
 import { DespesaService } from '../services/DespesaService';
+import { UsuarioComumService } from '../services/UsuarioComumService';
 
 export class DespesaController {
 
@@ -108,4 +108,31 @@ export class DespesaController {
       return res.status(500).json({ message: 'Erro ao atualizar despesa: ' + error });
     }
   }
+
+
+
+
+  static async realizarOperacao(req: Request, res: Response) {
+    try {
+        const despesaService = await DespesaService.getInstance();
+        const usuarioComumService = await UsuarioComumService.getInstance();
+
+        const idDespesa = Number(req.params.idDespesa);
+        const idUsuarioComum = Number(req.params.idUsuarioComum);
+
+        await despesaService.realizarOperacao(idDespesa, idUsuarioComum);
+
+
+        return res.status(200).json({
+            message:  'Operação realizada com sucesso',
+            despesa:  await despesaService.buscarPorId(idDespesa),
+            usuario:  await usuarioComumService.buscarPorId(idUsuarioComum)
+        });
+    } catch (error) {
+        return res.status(500).json({
+            message: `Erro ao realizar a operação da despesa: ${error}`,
+            error
+        });
+    }
+}
 }

@@ -1,5 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from "typeorm";
-import { Usuario } from "./Usuario";
+import { UsuarioComum } from "./UsuarioComum";
+import { Conta } from "./abstratas/Conta";
+import { Status } from "../enums/Status";
 
 
 export enum CategoriaDespesa {
@@ -9,36 +11,23 @@ export enum CategoriaDespesa {
   }
 
 @Entity()
-export class Despesa{
+export class Despesa extends Conta{
 
-    @PrimaryGeneratedColumn()
-      id!: Number;
-    
-      @Column({ type: "varchar", length: 100, nullable: false })
-      titulo!: String;
-    
-      @Column({ type: "varchar", length: 200, nullable: true })
-      descricao!: String;
-    
-      @Column({
-        type: "decimal",
-        precision: 10,
-        scale: 2,
-        nullable: true,
-      })
-      valor!: Number;
-    
+      operacao(conta: Conta, usuario: UsuarioComum): void {
+        usuario.saldo = conta.valor - usuario.saldo
+        conta.status = Status.FINALIZADO
+      }
     
       @Column({
         type: "enum",
         enum: CategoriaDespesa,
         nullable: false,
       })
-      categoria!: String;
+      categoria!: CategoriaDespesa;
       
 
-      @ManyToOne(() => Usuario, usuario => usuario.despesas)
-      usuario!: Usuario;
+      @ManyToOne(() => UsuarioComum, usuario => usuario.despesas)
+      usuario!: UsuarioComum;
 
     
     }

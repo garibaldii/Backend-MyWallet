@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
-import { CategoriaReceita, Receita } from './../entity/Receita';
 import { ReceitaService } from '../services/ReceitaService';
+import { UsuarioComumService } from '../services/UsuarioComumService';
 
 
 //USUÁRIO SÓ PODE TER ACESSO AS RECEITAS/DESPESAS QUE ELE MESMO CRIOU, OU SEJA, SÓ TERÁ ACESSO AOS
@@ -115,6 +115,29 @@ static async atualizar(req: Request, res: Response) {
   } catch (error) {
     return res.status(500).json({ message: 'Erro ao atualizar receita: ' + error });
   }
+}
+
+static async realizarOperacao(req: Request, res: Response) {
+  try{
+    const receitaService = await ReceitaService.getInstance()
+    const usuarioComumService = await UsuarioComumService.getInstance()
+
+    const idReceita = Number(req.params.idReceita)
+    const idUsuarioComum = Number(req.params.idUsuarioComum)
+
+
+    await receitaService.realizarOperacao(idReceita,idUsuarioComum)
+
+    return res.status(200).json({
+      message: 'Operacao Realizada com sucesso',
+      receita: await receitaService.buscarPorId(idReceita),
+      usuario: await usuarioComumService.buscarPorId(idUsuarioComum)
+  })
+  }
+  catch(error){
+    return res.status(500).json(`Erro ao realizar a operacao da receita ${error}`)
+  }
+
 }
 
 
