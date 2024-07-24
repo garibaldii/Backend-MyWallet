@@ -5,14 +5,18 @@ import rotaUsuario from './routes/UsuarioRoutes'
 import rotaReceita from './routes/ReceitaRoutes'
 import rotaDespesa from './routes/DespesaRoutes'
 import rotaAuth from './routes/AuthRoutes'
+import cors from 'cors'
+
 import "reflect-metadata"
 
 
 const app = express()
-const port = 3000
+const port = 8080
 
 
 
+
+app.use(cors())
 
 app.use(express.json())
 app.use(bodyParser.json())
@@ -36,6 +40,8 @@ const iniciarServidor = async () => {
 }
 
 iniciarServidor()
+
+
 
 
 
