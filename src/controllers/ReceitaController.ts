@@ -66,6 +66,9 @@ export class ReceitaController {
   }
 
 
+ 
+
+
   static async deletarTodos(req: Request, res: Response){
     try {
         const receitaSerice = await ReceitaService.getInstance()

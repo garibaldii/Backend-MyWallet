@@ -70,6 +70,7 @@ export class DespesaService {
         }) ?? undefined;
     }
 
+
     public async deletarTodos(): Promise<void> {
         await this.despesaRepository.clear();
     }
@@ -77,6 +78,9 @@ export class DespesaService {
     public async deletar(id: number): Promise<void> {
         await this.despesaRepository.delete(id);
     }
+
+
+
 
     public async atualizar(dados: Despesa, id: number): Promise<Despesa> {
         const despesa = await this.despesaRepository.findOne({

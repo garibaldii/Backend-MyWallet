@@ -2,6 +2,8 @@ import { Request, Response } from 'express';
 import bcrypt from 'bcryptjs'; // Importa a biblioteca bcrypt para hash de senhas
 import { UsuarioComum } from '../entity/UsuarioComum';
 import { UsuarioComumService } from '../services/UsuarioComumService';
+import jwt from 'jsonwebtoken'; // Importa a biblioteca para decodificar o JWT
+
 
 export class UsuarioComumController {
 
@@ -74,6 +76,9 @@ export class UsuarioComumController {
         return res.status(500).json({message: "Erro ao deletar o usuário"})
     }
   }
+
+  
+
 
 
 

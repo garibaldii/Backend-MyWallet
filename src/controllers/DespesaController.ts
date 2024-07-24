@@ -61,6 +61,9 @@ export class DespesaController {
     }
   }
 
+
+
+
   static async deletarTodos(req: Request, res: Response) {
     try {
       const despesaService = await DespesaService.getInstance();

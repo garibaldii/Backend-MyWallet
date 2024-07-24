@@ -73,6 +73,7 @@ export class ReceitaService {
     }
 
 
+
     public async deletarTodos(){
         return this.receitaRepository.clear()
     }
@@ -81,6 +82,8 @@ export class ReceitaService {
     public async deletar(id: number): Promise<void>{
         await this.receitaRepository.delete(id)
     }
+
+    
 
 
     public async atualizar(dados: Receita, id: number): Promise<Receita> {

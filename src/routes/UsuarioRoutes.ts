@@ -5,8 +5,9 @@ import { UsuarioComumController } from "../controllers/UsuarioComumController";
 const router = Router();
 
 // router.get("/", UsuarioController.listarTodos);
-// router.get("/:id", UsuarioController.listarUm);
+router.get("/:id", UsuarioComumController.listarUm);
 router.post("/", UsuarioComumController.criar);
+
 // router.delete("/:id", UsuarioController.deletar);
 
 

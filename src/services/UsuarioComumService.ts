@@ -1,9 +1,8 @@
 import { getRepository, Repository } from 'typeorm';
 import { UsuarioComum } from '../entity/UsuarioComum';
+import jwt from 'jsonwebtoken';
 
 export class UsuarioComumService {
- 
-
   private static instance: UsuarioComumService;
   private usuarioComumRepository: Repository<UsuarioComum>;
 
@@ -32,16 +31,12 @@ export class UsuarioComumService {
     });
   }
 
-
-  public async buscarPorId(id: number): Promise<UsuarioComum | undefined> {
+  public async buscarPorId(id: number): Promise<UsuarioComum | null> {
     return await this.usuarioComumRepository.findOne({
       where: { id: id },
       relations: ['receitas', 'despesas']
-    }) ?? undefined;
+    });
   }
 
-
-
-
-
+  
 }
