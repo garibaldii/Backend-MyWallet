@@ -38,7 +38,7 @@ export abstract class Usuario{
       type: "blob",
       nullable: true
     })
-    foto!: Buffer;
+    foto!: Buffer | null;
 
 
 

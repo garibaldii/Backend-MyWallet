@@ -14,7 +14,7 @@ export enum CategoriaDespesa {
 export class Despesa extends Conta{
 
       operacao(conta: Conta, usuario: UsuarioComum): void {
-        usuario.saldo = conta.valor - usuario.saldo
+        usuario.saldo = conta.valor - (usuario.saldo)
         conta.status = Status.FINALIZADO
       }
     

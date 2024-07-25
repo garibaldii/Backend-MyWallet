@@ -18,7 +18,7 @@ export class Receita extends Conta{
 
 
   operacao(receita: Receita, usuario: UsuarioComum): void {
-    usuario.saldo = receita.valor + usuario.saldo
+    usuario.saldo = receita.valor + (usuario.saldo)
     receita.status = Status.FINALIZADO
 
   }
